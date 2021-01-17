@@ -100,10 +100,10 @@ func (e *Extractor) Gz(ctx context.Context, body io.Reader, location string, ren
 	return nil
 }
 
-// Gz extracts a .gz or .tar.gz archived stream of data in the specified location.
+// Zz extracts a .xz or .tar.xz archived stream of data in the specified location.
 // It accepts a rename function to handle the names of the files (see the example)
 func (e *Extractor) Xz(ctx context.Context, body io.Reader, location string, rename Renamer) error {
-	reader, err := xz.NewReader(body)
+	reader, err := xz.NewReader(body, 0)
 	if err != nil {
 		return errors.Annotatef(err, "xz")
 	}
