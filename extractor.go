@@ -47,6 +47,8 @@ func (e *Extractor) Archive(ctx context.Context, body io.Reader, location string
 		return e.Gz(ctx, body, location, rename)
 	case "bz2":
 		return e.Bz2(ctx, body, location, rename)
+	case "xz":
+		return e.Xz(ctx, body, location, rename)
 	case "tar":
 		return e.Tar(ctx, body, location, rename)
 	default:
