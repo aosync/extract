@@ -1,4 +1,4 @@
-module github.com/codeclysm/extract/v3
+module github.com/aosync/extract
 
 go 1.14
 
