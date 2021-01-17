@@ -1,4 +1,4 @@
-module github.com/aosync/extract
+module github.com/aosync/extract/v3
 
 go 1.14
 
