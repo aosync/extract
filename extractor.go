@@ -16,6 +16,7 @@ import (
 	filetype "github.com/h2non/filetype"
 	"github.com/h2non/filetype/types"
 	"github.com/juju/errors"
+	"github.com/xi2/xz"
 )
 
 // Extractor is more sophisticated than the base functions. It allows to write over an interface
@@ -80,6 +81,29 @@ func (e *Extractor) Gz(ctx context.Context, body io.Reader, location string, ren
 	reader, err := gzip.NewReader(body)
 	if err != nil {
 		return errors.Annotatef(err, "Gunzip")
+	}
+
+	body, kind, err := match(reader)
+	if err != nil {
+		return err
+	}
+
+	if kind.Extension == "tar" {
+		return e.Tar(ctx, body, location, rename)
+	}
+	err = e.copy(ctx, location, 0666, body)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// Gz extracts a .gz or .tar.gz archived stream of data in the specified location.
+// It accepts a rename function to handle the names of the files (see the example)
+func (e *Extractor) Xz(ctx context.Context, body io.Reader, location string, rename Renamer) error {
+	reader, err := xz.NewReader(body)
+	if err != nil {
+		return errors.Annotatef(err, "xz")
 	}
 
 	body, kind, err := match(reader)
